@@ -65,8 +65,7 @@ public class Main {
 			for(int i=0; i<maxSet[3]+1; i++) {
 				map = turn(map, maxSet[1], maxSet[2]);
 			}
-
-
+			
 			remove();
 
 			while(findEmpty()>0) {
@@ -75,7 +74,6 @@ public class Main {
 				fill(e);
 				remove();
 			}
-			
 			sb.append(answer).append(" ");
 		
 		}
@@ -83,16 +81,7 @@ public class Main {
 		
 
 	}
-	
-	static void remove() {
-		for(int i=0; i<5; i++) {
-			for(int j=0; j<5; j++) {
-				visit = new boolean[5][5];
-				removeDFS(i,j,1);
-			}
-		}
-	}
-		
+
 	static int findEmpty() {
 		int empty = 0;
 		for(int i=0; i<5; i++) {
@@ -103,6 +92,32 @@ public class Main {
 		return empty;
 	}
 	
+	static void remove() {
+		for(int i=0; i<5; i++) {
+			for(int j=0; j<5; j++) {
+				int v = map[i][j];
+				visit = new boolean[5][5];
+				int n = removeDFS(i,j,1);
+				if(n<3) {
+					backDFS(i,j,v);
+				}
+				
+			}
+		}
+	}
+		
+	
+	static void backDFS(int x, int y, int v) {
+		map[x][y] = v;
+		for(int d = 0; d<4; d++) {
+			if(x+dx[d]<0||x+dx[d]>=5||y+dy[d]<0|| y+dy[d]>=5||
+					!visit[x+dx[d]][y+dy[d]]) continue;
+			
+			if(map[x+dx[d]][y+dy[d]]==0) {
+				backDFS(x+dx[d], y+dy[d], v);
+			}
+		}
+	}
 	static int removeDFS(int x, int y, int c) {
 		visit[x][y] = true;
 		int n = map[x][y];
@@ -112,13 +127,8 @@ public class Main {
 					visit[x+dx[d]][y+dy[d]]) continue;
 			
 			if(n==map[x+dx[d]][y+dy[d]]) {
-				c = removeDFS(x+dx[d], y+dy[d], c+1);
+				c+=removeDFS(x+dx[d], y+dy[d], 1);
 			}
-		}
-		
-		if(c<3) {
-			map[x][y] = n;
-			c--;
 		}
 		
 		return c;
@@ -129,7 +139,6 @@ public class Main {
 		while(empty>0) {
 			for(int j=0; j<5; j++) {
 				for(int i=4; i>=0; i--) {
-
 					if(map[i][j]==0) {
 						map[i][j] = wall[idx];
 						idx++;
@@ -175,7 +184,7 @@ public class Main {
 			if(x+dx[d]<0||x+dx[d]>=5||y+dy[d]<0|| y+dy[d]>=5||
 					visit[x+dx[d]][y+dy[d]]) continue;
 			if(m[x][y]==m[x+dx[d]][y+dy[d]]) {
-				c = dfs(m, x+dx[d], y+dy[d], c+1);
+				c+= dfs(m, x+dx[d], y+dy[d], 1);
 			}
 		}
 		return c ;
