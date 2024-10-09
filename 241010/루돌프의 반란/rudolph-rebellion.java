@@ -85,7 +85,6 @@ public class Main {
 			}
 			
 			for(int i=1; i<=P; i++) { //산타 이동
-				
 				for(Santa santa: santas) {
 					if(santa.n==i) {
 						if(santa.t==0) {
@@ -98,6 +97,7 @@ public class Main {
 								rodolfHitSanta(santa,(d+4)%8, D);
 							}
 						}else if(santa.t>0) santa.t--;
+						break;
 					}
 				}
 				
