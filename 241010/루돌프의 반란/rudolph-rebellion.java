@@ -68,6 +68,7 @@ public class Main {
 		for(int m=0; m<M; m++) {
 			
 			//가장 까까운 산타 찾기
+			if(santas.size()==0) break;
 			Santa closeSanta = findCloseSanta();
 			
 			//산타에게 돌진하기
