@@ -119,7 +119,7 @@ public class Main {
 	}
 	
 	static int[] findCloseParticipant() {
-		int[] minRC = new int[2];
+		int[] minRC = new int[3];
 		int minD = Integer.MAX_VALUE;
 		for(int[] p: participants.values()) {
 			int d = Integer.max(Math.abs(p[0]-er), Math.abs(p[1]-ec));
@@ -129,11 +129,11 @@ public class Main {
 			}else if(d==minD) {
 				int[] rc = findSquare(p);
 				if(rc[0]<minRC[0]) {
-					rc = p;
+					minRC = rc;
 					minD = d;
 				}else if(rc[0]==minRC[0]) {
 					if(rc[1]<minRC[1]) {
-						rc = p;
+						minRC = rc;
 						minD = d;
 					}
 				}
