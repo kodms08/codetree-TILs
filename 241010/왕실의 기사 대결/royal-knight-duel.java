@@ -120,7 +120,7 @@ public class Main {
 		int sum = 0;
 		for(int r=p.r; r<p.r+p.h; r++) {
 			for(int c=p.c; c<p.c+p.w; c++) {
-				if(position[r][c]!=0) push(position[r][c],d);
+				if(position[r][c]!=0) pushed(position[r][c],d);
 				position[r][c] = n;
 				if(map[r][c]==1) sum++;
 			}
