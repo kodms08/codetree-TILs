@@ -71,7 +71,9 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			int i = Integer.parseInt(st.nextToken());
 			int d = Integer.parseInt(st.nextToken());
-
+			Person p = persons.get(i);
+			if(p.k<=0) continue;
+			
 			//기사 밀기
 			if(canMove(i,d)) { //공격할 수 있다면
 				//공격
