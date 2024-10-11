@@ -64,10 +64,11 @@ public class Main {
 			Top high = lowHigh[1];
 			
 			//포탑 공격
+			visit = new boolean[N][M]; //공격 유무
 			int distance = finMinDistance(low, high); //최단거리 찾기
 			visit = new boolean[N][M]; //공격 유무
 			if(distance>0) { //레이저 공격
-				laser(distance, low.r, low.c, 0, low, high);
+				laser(0, distance, low.r, low.c, 0, low, high);
 			}else { ///포탄 공격
 				bomb(low, high);
 			}
@@ -76,7 +77,7 @@ public class Main {
 			
 			//포탑정비
 			refactory();
-			
+
 		}
 			
 		int answer = 0;
@@ -120,28 +121,32 @@ public class Main {
 		}
 	}
 
-	static boolean laser(int distance, int r, int c, int d, Top low, Top high) {
+	static boolean laser(int dir, int distance, int r, int c, int d, Top low, Top high) {
 		if(r==high.r&&c==high.c) {
 			high.p-=low.p;
 			demageTop(high);
+			visit[r][c]=true;
 			return true;
 		}
 		visit[r][c] = true;
 		if(d==distance) return false;
 		
-		for(int i=0; i<4; i++) {
-			int nr = r+dx[i];
-			int nc = c+dy[d];
-			if(nr<0) nr=N-nr;
-			else if(nr>=N) nr=nr-N;
-			if(nc<0) nc=M-nc;
-			else if(nc>=M) nc=nc-M;
+		for(int i=dir; i<dir+4; i++) {
+			int nd=i%4;
+			int nr = r+dx[nd];
+			int nc = c+dy[nd];
+			if(nr<0) nr+=N;
+			else if(nr>=N) nr-=N;
+			if(nc<0) nc+=M;
+			else if(nc>=M) nc-=M;
 			
-			if(visit[nr][nc]||map[nr][nc]>0) continue;
-			if(laser(distance, nr, nc, d+1, low, high)) {
-				Top t = tops.get(map[nr][nc]);
-				t.p-=(low.p/2);
-				demageTop(t);
+			if(visit[nr][nc]||map[nr][nc]==0) continue;
+			if(laser(nd, distance, nr, nc, d+1, low, high)) {
+				if(nr!=high.r||nc!=high.c) {
+					Top t = tops.get(map[nr][nc]);
+					t.p-=(low.p/2);
+					demageTop(t);
+				}
 				return true;
 			}
 			visit[nr][nc]=false;
@@ -157,7 +162,6 @@ public class Main {
 	}
 	
 	static int finMinDistance(Top low, Top high) {
-		boolean[][] visit = new boolean[N][M];
 		Queue<int[]> queue = new LinkedList<>();
 		queue.add(new int[] {low.r, low.c, 0});
 		visit[low.r][low.c] = true;
@@ -165,8 +169,8 @@ public class Main {
 		while(!queue.isEmpty()) {
 			int[] c = queue.poll();
 			for(int d=0; d<4; d++) {
-				int nr = low.r+dx[d];
-				int nc = low.c+dy[d];
+				int nr = c[0]+dx[d];
+				int nc = c[1]+dy[d];
 				if(nr<0) nr+=N;
 				else if(nr>=N) nr-=N;
 				if(nc<0) nc+=M;
