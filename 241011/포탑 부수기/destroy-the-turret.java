@@ -68,7 +68,7 @@ public class Main {
 			int distance = finMinDistance(low, high); //최단거리 찾기
 			visit = new boolean[N][M]; //공격 유무
 			if(distance>0) { //레이저 공격
-				laser(0, distance, low.r, low.c, 0, low, high);
+				laser(distance, low.r, low.c, 0, low, high);
 			}else { ///포탄 공격
 				bomb(low, high);
 			}
@@ -107,9 +107,10 @@ public class Main {
 				if(c<0) c+=M;
 				else if(c>=M) c-=M;
 				
+				if(r==low.r&&c==low.c) continue;
 				if(map[r][c]==0) continue;
 				visit[r][c]=true;
-				if(r==high.r&& c==high.c) {
+				if(r==high.r&&c==high.c) {
 					high.p-=low.p;
 					demageTop(high);
 				}else {
@@ -121,7 +122,7 @@ public class Main {
 		}
 	}
 
-	static boolean laser(int dir, int distance, int r, int c, int d, Top low, Top high) {
+	static boolean laser(int distance, int r, int c, int d, Top low, Top high) {
 		if(r==high.r&&c==high.c) {
 			high.p-=low.p;
 			demageTop(high);
@@ -131,17 +132,16 @@ public class Main {
 		visit[r][c] = true;
 		if(d==distance) return false;
 		
-		for(int i=dir; i<dir+4; i++) {
-			int nd=i%4;
-			int nr = r+dx[nd];
-			int nc = c+dy[nd];
+		for(int i=0; i<4; i++) {
+			int nr = r+dx[i];
+			int nc = c+dy[i];
 			if(nr<0) nr+=N;
 			else if(nr>=N) nr-=N;
 			if(nc<0) nc+=M;
 			else if(nc>=M) nc-=M;
 			
 			if(visit[nr][nc]||map[nr][nc]==0) continue;
-			if(laser(nd, distance, nr, nc, d+1, low, high)) {
+			if(laser(distance, nr, nc, d+1, low, high)) {
 				if(nr!=high.r||nc!=high.c) {
 					Top t = tops.get(map[nr][nc]);
 					t.p-=(low.p/2);
