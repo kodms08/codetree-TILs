@@ -102,10 +102,10 @@ public class Main {
 			for(int j=-1; j<2; j++) {
 				int r=high.r+i;
 				int c=high.c+j;
-				if(r<0) r=N-r;
-				else if(r>=N) r=r-N;
-				if(c<0) c=M-c;
-				else if(c>=M) c=c-M;
+				if(r<0) r+=N;
+				else if(r>=N) r-=N;
+				if(c<0) c+=M;
+				else if(c>=M) c-=M;
 				
 				if(map[r][c]==0) continue;
 				visit[r][c]=true;
